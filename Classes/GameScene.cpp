@@ -59,8 +59,85 @@ bool GameScene::init() {
 	//重要，设置允许触屏
 	this->setTouchEnabled(true);
 
+	//TODO 粒子系统
+//	//初始化粒子
+//	CCParticleSystemQuad * m_emitter = new CCParticleSystemQuad();
+//	m_emitter->initWithTotalParticles(50);
+//	//设置半径
+//	m_emitter->setRadialAccel(-120);
+//	m_emitter->setRadialAccelVar(0);
+//	m_emitter->setPosition(size.width/2, size.height/2);
+////	pSprite->addChild(m_emitter,10);
+
+
+	CCParticleSystem* m_emitter;
+	m_emitter = new CCParticleSystemQuad();
+	 m_emitter->initWithTotalParticles(50);
+	 this->addChild(m_emitter, 10);
+	 m_emitter->setTexture( CCTextureCache::sharedTextureCache()->addImage("fire1.png") );
+	 m_emitter->setDuration(-1);
+
+	   // gravity
+	 m_emitter->setGravity(CCPointZero);
+
+	   // angle
+	 m_emitter->setAngle(90);
+	 m_emitter->setAngleVar(360);
+
+	   // speed of particles
+	 m_emitter->setSpeed(160);
+	 m_emitter->setSpeedVar(20);
+
+	   // radial
+	 m_emitter->setRadialAccel(-120);
+	 m_emitter->setRadialAccelVar(0);
+
+	   // tagential
+	 m_emitter->setTangentialAccel(30);
+	 m_emitter->setTangentialAccelVar(0);
+
+	   // emitter position
+	 m_emitter->setPosition( CCPointMake(160,240) );
+	 m_emitter->setPosVar(CCPointZero);
+
+	   // life of particles
+	 m_emitter->setLife(4);
+	 m_emitter->setLifeVar(1);
+
+	   // spin of particles
+	 m_emitter->setStartSpin(0);
+	 m_emitter->setStartSizeVar(0);
+	 m_emitter->setEndSpin(0);
+	 m_emitter->setEndSpinVar(0);
+
+	   // color of particles
+	 ccColor4F startColor = {0.5f, 0.5f, 0.5f, 1.0f};
+	 m_emitter->setStartColor(startColor);
+
+	 ccColor4F startColorVar = {0.5f, 0.5f, 0.5f, 1.0f};
+	 m_emitter->setStartColorVar(startColorVar);
+
+	 ccColor4F endColor = {0.1f, 0.1f, 0.1f, 0.2f};
+	 m_emitter->setEndColor(endColor);
+
+	 ccColor4F endColorVar = {0.1f, 0.1f, 0.1f, 0.2f};
+	 m_emitter->setEndColorVar(endColorVar);
+
+	   // size, in pixels
+	 m_emitter->setStartSize(80.0f);
+	 m_emitter->setStartSizeVar(40.0f);
+	 m_emitter->setEndSize(kParticleStartSizeEqualToEndSize);
+
+	   // emits per second
+	 m_emitter->setEmissionRate(m_emitter->getTotalParticles()/m_emitter->getLife());
+
+	   // additive
+	 m_emitter->setBlendAdditive(true);
+
 	return true;
 }
+
+
 
 //退出所有程序
 void GameScene::menuCloseCallback(CCObject* pSender) {
@@ -85,7 +162,7 @@ bool GameScene::ccTouchBegan(cocos2d::CCTouch *touch, cocos2d::CCEvent *event) {
 	//获取触点坐标
 	CCPoint touchLocation = touch->locationInView();
 	touchLocation = CCDirector::sharedDirector()->convertToGL(touchLocation);
-	CCLog("touch began*********************");
+//	CCLog("touch began*********************");
 
 	return true;
 }
@@ -117,22 +194,21 @@ void GameScene::ccTouchCancelled(cocos2d::CCTouch* touch,
 }
 
 void GameScene::addTarget() {
-	CCSprite *target = CCSprite::create("plane.jpg");
 
-	//TODO y轴变x轴
+	//TODO 随机选择敌机
+	int n = 1;
+	CCSprite *target = CCSprite::create("fire1.png");
 
 	//Determin where to spawm the target along the Y axis;
 	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
-	int minY = target->getContentSize().height / 2;
-	int maxY = winSize.height - target->getContentSize().height / 2;
-
+//	int minY = target->getContentSize().height / 2;
+//	int maxY = winSize.height - target->getContentSize().height / 2;
 	int minX = target->getContentSize().width /2 ;
 	int maxX = winSize.width - target->getContentSize().width/2;
 
 	int rangeX = maxX - minX;
-
-	int rangeY = maxY - minY;
-	int actualY = (rand() % rangeY) + minY;
+//	int rangeY = maxY - minY;
+//	int actualY = (rand() % rangeY) + minY;
 
 	int actualX = (rand() % rangeX) + minX;
 	//create the target slightly off-screen along the right edge and along a random position along the y axis as calculated
@@ -159,6 +235,8 @@ void GameScene::addTarget() {
 	CCFiniteTimeAction* actionMoveDone = CCCallFuncN::create(this,
 			callfuncN_selector(GameScene::spriteMoveFinished));
 	target->runAction(CCSequence::create(actionMove, actionMoveDone, NULL));
+
+
 
 }
 

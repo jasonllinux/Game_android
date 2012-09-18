@@ -33,12 +33,14 @@ public:
     void spriteMoveFinished(CCNode* sender);
     void gameLogic(float dt);
 
+
     CREATE_FUNC(GameScene);
 
 private :
 //    CCMutableArray *  _shipLasers ;
 
 //    int _nextShipLaser ;
+    void addParticle();
 
 
 };
