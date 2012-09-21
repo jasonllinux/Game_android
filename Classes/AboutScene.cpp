@@ -60,6 +60,7 @@ void AboutScene::menuBackCallback(CCObject* pSender)
 {
     CCDirector::sharedDirector()->replaceScene(NewMenuScene::scene());
 
+
 }
 
 

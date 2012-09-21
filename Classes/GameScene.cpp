@@ -7,6 +7,7 @@
 
 #include "NewMenuScene.h"
 #include "GameScene.h"
+//#include <CCArray.h>
 
 #include "SimpleAudioEngine.h"
 
@@ -54,7 +55,9 @@ bool GameScene::init() {
 
 	//添加敌方部队
 	//schedule_selector
+	//每帧调用
 	this->schedule(schedule_selector(GameScene::gameLogic), 1.0);
+	this->schedule(schedule_selector(GameScene::update));
 
 	//重要，设置允许触屏
 	this->setTouchEnabled(true);
@@ -69,75 +72,74 @@ bool GameScene::init() {
 //	m_emitter->setPosition(size.width/2, size.height/2);
 ////	pSprite->addChild(m_emitter,10);
 
-
 	CCParticleSystem* m_emitter;
 	m_emitter = new CCParticleSystemQuad();
-	 m_emitter->initWithTotalParticles(50);
-	 this->addChild(m_emitter, 10);
-	 m_emitter->setTexture( CCTextureCache::sharedTextureCache()->addImage("fire1.png") );
-	 m_emitter->setDuration(-1);
+	m_emitter->initWithTotalParticles(50);
+	this->addChild(m_emitter, 10);
+	m_emitter->setTexture(
+			CCTextureCache::sharedTextureCache()->addImage("fire1.png"));
+	m_emitter->setDuration(-1);
 
-	   // gravity
-	 m_emitter->setGravity(CCPointZero);
+	// gravity
+	m_emitter->setGravity(CCPointZero);
 
-	   // angle
-	 m_emitter->setAngle(90);
-	 m_emitter->setAngleVar(360);
+	// angle
+	m_emitter->setAngle(90);
+	m_emitter->setAngleVar(360);
 
-	   // speed of particles
-	 m_emitter->setSpeed(160);
-	 m_emitter->setSpeedVar(20);
+	// speed of particles
+	m_emitter->setSpeed(160);
+	m_emitter->setSpeedVar(20);
 
-	   // radial
-	 m_emitter->setRadialAccel(-120);
-	 m_emitter->setRadialAccelVar(0);
+	// radial
+	m_emitter->setRadialAccel(-120);
+	m_emitter->setRadialAccelVar(0);
 
-	   // tagential
-	 m_emitter->setTangentialAccel(30);
-	 m_emitter->setTangentialAccelVar(0);
+	// tagential
+	m_emitter->setTangentialAccel(30);
+	m_emitter->setTangentialAccelVar(0);
 
-	   // emitter position
-	 m_emitter->setPosition( CCPointMake(160,240) );
-	 m_emitter->setPosVar(CCPointZero);
+	// emitter position
+	m_emitter->setPosition(CCPointMake(160,240));
+	m_emitter->setPosVar(CCPointZero);
 
-	   // life of particles
-	 m_emitter->setLife(4);
-	 m_emitter->setLifeVar(1);
+	// life of particles
+	m_emitter->setLife(4);
+	m_emitter->setLifeVar(1);
 
-	   // spin of particles
-	 m_emitter->setStartSpin(0);
-	 m_emitter->setStartSizeVar(0);
-	 m_emitter->setEndSpin(0);
-	 m_emitter->setEndSpinVar(0);
+	// spin of particles
+	m_emitter->setStartSpin(0);
+	m_emitter->setStartSizeVar(0);
+	m_emitter->setEndSpin(0);
+	m_emitter->setEndSpinVar(0);
 
-	   // color of particles
-	 ccColor4F startColor = {0.5f, 0.5f, 0.5f, 1.0f};
-	 m_emitter->setStartColor(startColor);
+	// color of particles
+	ccColor4F startColor = { 0.5f, 0.5f, 0.5f, 1.0f };
+	m_emitter->setStartColor(startColor);
 
-	 ccColor4F startColorVar = {0.5f, 0.5f, 0.5f, 1.0f};
-	 m_emitter->setStartColorVar(startColorVar);
+	ccColor4F startColorVar = { 0.5f, 0.5f, 0.5f, 1.0f };
+	m_emitter->setStartColorVar(startColorVar);
 
-	 ccColor4F endColor = {0.1f, 0.1f, 0.1f, 0.2f};
-	 m_emitter->setEndColor(endColor);
+	ccColor4F endColor = { 0.1f, 0.1f, 0.1f, 0.2f };
+	m_emitter->setEndColor(endColor);
 
-	 ccColor4F endColorVar = {0.1f, 0.1f, 0.1f, 0.2f};
-	 m_emitter->setEndColorVar(endColorVar);
+	ccColor4F endColorVar = { 0.1f, 0.1f, 0.1f, 0.2f };
+	m_emitter->setEndColorVar(endColorVar);
 
-	   // size, in pixels
-	 m_emitter->setStartSize(80.0f);
-	 m_emitter->setStartSizeVar(40.0f);
-	 m_emitter->setEndSize(kParticleStartSizeEqualToEndSize);
+	// size, in pixels
+	m_emitter->setStartSize(80.0f);
+	m_emitter->setStartSizeVar(40.0f);
+	m_emitter->setEndSize(kParticleStartSizeEqualToEndSize);
 
-	   // emits per second
-	 m_emitter->setEmissionRate(m_emitter->getTotalParticles()/m_emitter->getLife());
+	// emits per second
+	m_emitter->setEmissionRate(
+			m_emitter->getTotalParticles() / m_emitter->getLife());
 
-	   // additive
-	 m_emitter->setBlendAdditive(true);
+	// additive
+	m_emitter->setBlendAdditive(true);
 
 	return true;
 }
-
-
 
 //退出所有程序
 void GameScene::menuCloseCallback(CCObject* pSender) {
@@ -167,8 +169,45 @@ bool GameScene::ccTouchBegan(cocos2d::CCTouch *touch, cocos2d::CCEvent *event) {
 	return true;
 }
 
-void GameScene::ccTouchEnded(cocos2d::CCTouch * touch,
-		cocos2d::CCEvent * event) {
+//触屏结束的时候发射子弹
+void GameScene::ccTouchEnded(cocos2d::CCTouch * touch, cocos2d::CCEvent * event) {
+	CCPoint location = touch->locationInView();
+	location = CCDirector::sharedDirector()->convertToGL(location);
+
+
+	// Set up initial location of projectile
+	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+	CCSprite* pBullet = CCSprite::spriteWithFile("bullet.png",
+			CCRectMake(0, 0, 20 ,20));
+	pBullet->setPosition(ccp(20, winSize.height/2));
+
+	// Determinie offset of location to projectile
+	int offX = location.x - pBullet->getPosition().x;
+	int offY = location.y - pBullet->getPosition().y;
+
+	if (offX <= 0)
+		return;
+
+	this->addChild(pBullet);
+
+	// Determine where we wish to shoot the pBullet to
+	int realX = winSize.width + (pBullet->getContentSize().width / 2);
+	float ratio = (float) offY / (float) offX;
+	int realY = (realX * ratio) + pBullet->getPosition().y;
+	CCPoint realDest = ccp(realX, realY);
+
+	// Determine the length of how far we're shooting
+	int offRealX = realX - pBullet->getPosition().x;
+	int offRealY = realY - pBullet->getPosition().y;
+	float length = sqrtf((offRealX * offRealX) + (offRealY * offRealY));
+	float velocity = 480 / 1; // 480pixels/1sec
+	float realMoveDuration = length / velocity;
+
+	// Move pBullet to actual endpoint
+	pBullet->runAction(CCSequence::actions(CCMoveTo::actionWithDuration(realMoveDuration, realDest),
+										   CCCallFuncN::actionWithTarget(this,
+										   callfuncN_selector(GameScene::spriteMoveFinished)),
+										   	   NULL));
 
 }
 
@@ -203,8 +242,8 @@ void GameScene::addTarget() {
 	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
 //	int minY = target->getContentSize().height / 2;
 //	int maxY = winSize.height - target->getContentSize().height / 2;
-	int minX = target->getContentSize().width /2 ;
-	int maxX = winSize.width - target->getContentSize().width/2;
+	int minX = target->getContentSize().width / 2;
+	int maxX = winSize.width - target->getContentSize().width / 2;
 
 	int rangeX = maxX - minX;
 //	int rangeY = maxY - minY;
@@ -236,8 +275,6 @@ void GameScene::addTarget() {
 			callfuncN_selector(GameScene::spriteMoveFinished));
 	target->runAction(CCSequence::create(actionMove, actionMoveDone, NULL));
 
-
-
 }
 
 //move finished,删除该节点
@@ -250,4 +287,22 @@ void GameScene::spriteMoveFinished(CCNode* sender) {
 void GameScene::gameLogic(float dt) {
 //    CCLog("add a move sprite...");
 	this->addTarget();
+}
+
+//TODO 每帧自动调用
+//碰撞检测
+void GameScene::update(CCTime dt)
+{
+
+//	CCLog("Game Scene update........");
+//	CCArray<CCSprite* > *projectilesToDelete = new CCArray<CCSprite*>;
+//	CCMutableArray<CCSprite*> *projectilesToDelete =  new CCMutableArray<CCSprite*>;
+
+	//记录碰撞后需要移除的Sprite
+	CCArray* projectilesToDelete =new CCArray();
+//	CCArray::
+
+
+//	CCArray<CCSprite*>::CCArrayIterator it, jt;  //迭代器
+
 }

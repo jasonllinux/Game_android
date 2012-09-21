@@ -34,15 +34,17 @@
 							</tool>
 							<tool id="org.eclipse.cdt.build.core.settings.holder.529828483" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder">
 								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.676114551" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/home/arch/cocos2d-x/cocos2dx"/>
-									<listOptionValue builtIn="false" value="/home/arch/cocos2d-x/cocos2dx/include"/>
 									<listOptionValue builtIn="false" value="/opt/android-ndk/platforms/android-8/arch-arm/usr/include"/>
-									<listOptionValue builtIn="false" value="/home/arch/cocos2d-x/CocosDenshion/include"/>
-									<listOptionValue builtIn="false" value="/home/arch/cocos2d-x/cocos2dx/platform/linux"/>
-									<listOptionValue builtIn="false" value="/home/arch/cocos2d-x/external/Box2D"/>
-									<listOptionValue builtIn="false" value="/home/arch/cocos2d-x/cocos2dx/layers_scenes_transitions_nodes"/>
-									<listOptionValue builtIn="false" value="/home/arch/cocos2d-x/external/chipmunk/include/chipmunk"/>
-									<listOptionValue builtIn="false" value="/home/arch/cocos2d-x/cocos2dx/platform"/>
+									<listOptionValue builtIn="false" value="/usr/include/c++/4.7.1"/>
+									<listOptionValue builtIn="false" value="/usr/include"/>
+									<listOptionValue builtIn="false" value="../../../cocos2dx"/>
+									<listOptionValue builtIn="false" value="../../../cocos2dx/include"/>
+									<listOptionValue builtIn="false" value="../../../cocos2dx/platform"/>
+									<listOptionValue builtIn="false" value="../../../CocosDenshion/include"/>
+									<listOptionValue builtIn="false" value="../../../cocos2dx/platform/linux"/>
+									<listOptionValue builtIn="false" value="../../../cocos2dx/layers_scenes_transitions_nodes"/>
+									<listOptionValue builtIn="false" value="../../../external/chipmunk/include/chipmunk"/>
+									<listOptionValue builtIn="false" value="../../../external/Box2D"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.593795222" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>

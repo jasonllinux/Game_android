@@ -22,6 +22,9 @@ public:
 	//
 
 private :
+	CCSize winSize;
+	boolean init;
+	void init();
 
 };
 
