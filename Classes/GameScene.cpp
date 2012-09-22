@@ -22,9 +22,9 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
-//	if(world != NULL) {
-//		delete world;
-//	}
+	if(world != NULL) {
+		delete world;
+	}
 }
 
 
@@ -155,9 +155,18 @@ bool GameScene::init() {
 	//---------------------------------------------------------
 
 	//-------------------------------------碰撞检测
-//	 this->contactListener = new MyContactListener();
+	// create physic world
+	b2Vec2 gravity(0,0);
+	world = new b2World(gravity);
+	world->SetAllowSleeping(false);
+	//contact listener
+	this->contactListener = new MyContactListener();
+	world->SetContactListener(contactListener);
+
+//	  spawnCar();
 //
-//	world->SetContactListener(contactListener);
+//	  schedule(schedule_selector(HelloWorld::tick));
+//	  schedule(schedule_selector(HelloWorld::secondUpdate), 1.f);
 
 	return true;
 }
