@@ -5,14 +5,28 @@
  *      Author: arch
  */
 
+//#include <Box2D/Box2D.h>
+
 #include "NewMenuScene.h"
 #include "GameScene.h"
-//#include <CCArray.h>
 
 #include "SimpleAudioEngine.h"
 
 using namespace cocos2d;
 using namespace CocosDenshion;
+
+GameScene::GameScene()
+{
+
+}
+
+GameScene::~GameScene()
+{
+//	if(world != NULL) {
+//		delete world;
+//	}
+}
+
 
 CCScene* GameScene::scene() {
 	CCScene *scene = CCScene::create();
@@ -137,6 +151,13 @@ bool GameScene::init() {
 
 	// additive
 	m_emitter->setBlendAdditive(true);
+
+	//---------------------------------------------------------
+
+	//-------------------------------------碰撞检测
+//	 this->contactListener = new MyContactListener();
+//
+//	world->SetContactListener(contactListener);
 
 	return true;
 }

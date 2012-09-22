@@ -1,4 +1,10 @@
 eclipse.preferences.version=1
+environment/project/0.297360962/CPLUS_INCLUDE_PATH/delimiter=\:
+environment/project/0.297360962/CPLUS_INCLUDE_PATH/operation=append
+environment/project/0.297360962/CPLUS_INCLUDE_PATH/value=/usr/include/c++/4.7.1
+environment/project/0.297360962/C_INCLUDE_PATH/delimiter=\:
+environment/project/0.297360962/C_INCLUDE_PATH/operation=append
+environment/project/0.297360962/C_INCLUDE_PATH/value=/usr/include
 environment/project/0.297360962/NDK_ROOT/delimiter=\:
 environment/project/0.297360962/NDK_ROOT/operation=append
 environment/project/0.297360962/NDK_ROOT/value=/opt/android-ndk

@@ -9,58 +9,67 @@
 #define GAMESCENE_H_
 
 #include "cocos2d.h"
-#include "Box2D.h"
 #include <list>
+#include <iostream>
+//#include <Box2D/Box2D.h>
 
 using std::list;
 
-//-------------------------------------------------------------------------------//
+//--------------- System.loadLibrary("box2d");----------------------------------------------------------------//
 
 class MyContact {
 public:
-	b2Fixture* fixtureA;
-	b2Fixture* fixtureB;
+	//定制器
+//	b2Fixture* fixtureA;
+//	b2Fixture* fixtureB;
 };
 
 // Contact listener
-class MyContactListener: public b2ContactListener {
-	// Callbacks for derived classes.
-
-	virtual void BeginContact(b2Contact* contact) {
-		if (contact) {
-			MyContact mc;
-			mc.fixtureA = contact->GetFixtureA();
-			mc.fixtureB = contact->GetFixtureB();
-
-			contact_list.push_back(mc);
-		}
-		B2_NOT_USED(contact);
-	}
-
-	virtual void EndContact(b2Contact* contact) {
-		contact_list.clear();
-		B2_NOT_USED(contact);
-	}
-	virtual void PreSolve(b2Contact* contact, const b2Manifold* oldManifold) {
-		B2_NOT_USED(contact);
-		B2_NOT_USED(oldManifold);
-	}
-
-	virtual void PostSolve(const b2Contact* contact,
-			const b2ContactImpulse* impulse) {
-		B2_NOT_USED(contact);
-		B2_NOT_USED(impulse);
-	}
-
-public:
-	std::list<MyContact> contact_list;
-
-};
+//接触监听器
+//class MyContactListener: public b2ContactListener {
+//
+//public:
+//	// Callbacks for derived classes.
+//	virtual void BeginContact(b2Contact* contact) {
+//		if (contact) {
+//			MyContact mc;
+//			mc.fixtureA = contact->GetFixtureA();
+//			mc.fixtureB = contact->GetFixtureB();
+//
+//			contact_list.push_back(mc);
+//		}
+//		B2_NOT_USED(contact);
+//	}
+////
+//	virtual void EndContact(b2Contact* contact) {
+//		contact_list.clear();
+//		B2_NOT_USED(contact);
+//	}
+//
+//	virtual void PreSolve(b2Contact* contact, const b2Manifold* oldManifold) {
+//		B2_NOT_USED(contact);
+//		B2_NOT_USED(oldManifold);
+//	}
+//
+//	virtual void PostSolve(const b2Contact* contact, const b2ContactImpulse* impulse) {
+//		B2_NOT_USED(contact);
+//		B2_NOT_USED(impulse);
+//	}
+//
+//	std::list<MyContact> contact_list;
+//
+//private:
+//
+//};
 
 //-----------------------------------------------------------------------//
 class GameScene: public cocos2d::CCLayer {
 
 public:
+
+	GameScene();
+	~GameScene();
+
 	virtual bool init();
 
 	static cocos2d::CCScene* scene();
@@ -89,10 +98,18 @@ public:
 	void update(CCTime dt);
 
 private:
-//    CCMutableArray *  _shipLasers ;
 
-//    int _nextShipLaser ;
+	//老的碰撞检测
+// CCMutableArray *  _shipLasers ;
+// int _nextShipLaser ;
+
+	//TODO 添加粒子
 	void addParticle();
+
+	//碰撞检测
+//	b2World* world;
+//	MyContactListener* contactListener;
+
 
 };
 
