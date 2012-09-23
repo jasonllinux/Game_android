@@ -6,7 +6,6 @@
  */
 
 //#include <Box2D/Box2D.h>
-
 #include "NewMenuScene.h"
 #include "GameScene.h"
 
@@ -15,18 +14,18 @@
 using namespace cocos2d;
 using namespace CocosDenshion;
 
-GameScene::GameScene()
-{
+#define TILE_SIZE 32
+#define PT_RATIO 32
+
+GameScene::GameScene() {
 
 }
 
-GameScene::~GameScene()
-{
-	if(world != NULL) {
+GameScene::~GameScene() {
+	if (world) {
 		delete world;
 	}
 }
-
 
 CCScene* GameScene::scene() {
 	CCScene *scene = CCScene::create();
@@ -70,22 +69,267 @@ bool GameScene::init() {
 	//添加敌方部队
 	//schedule_selector
 	//每帧调用
-	this->schedule(schedule_selector(GameScene::gameLogic), 1.0);
-	this->schedule(schedule_selector(GameScene::update));
 
-	//重要，设置允许触屏
+	//添加粒子系统
+	this->addParticle();
+	//---碰撞检测
+	// create physic world
+	b2Vec2 gravity(0, 0);
+	world = new b2World(gravity);
+	world->SetAllowSleeping(false);
+	//contact listener
+
+	this->contactListener = new MyContactListener();
+	world->SetContactListener(contactListener);
+
+//	  spawnCar();
+//
+	schedule(schedule_selector(GameScene::tick));
+	this->schedule(schedule_selector(GameScene::gameLogic), 1.0);
+	this->schedule(schedule_selector(GameScene::update), 1.f);
+
 	this->setTouchEnabled(true);
 
-	//TODO 粒子系统
-//	//初始化粒子
-//	CCParticleSystemQuad * m_emitter = new CCParticleSystemQuad();
-//	m_emitter->initWithTotalParticles(50);
-//	//设置半径
-//	m_emitter->setRadialAccel(-120);
-//	m_emitter->setRadialAccelVar(0);
-//	m_emitter->setPosition(size.width/2, size.height/2);
-////	pSprite->addChild(m_emitter,10);
+	return true;
+}
 
+//退出所有程序
+void GameScene::menuCloseCallback(CCObject* pSender) {
+	CCDirector::sharedDirector()->end();
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	exit(0);
+#endif
+}
+
+void GameScene::menuBackCallback(CCObject* pSender) {
+	CCDirector::sharedDirector()->replaceScene(NewMenuScene::scene());
+}
+
+//注册
+void GameScene::registerWithTouchDispatcher() {
+	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(
+			this, 0, true);
+}
+
+bool GameScene::ccTouchBegan(cocos2d::CCTouch *touch, cocos2d::CCEvent *event) {
+	//获取触点坐标
+	CCPoint touchLocation = touch->getLocationInView();
+	touchLocation = CCDirector::sharedDirector()->convertToGL(touchLocation);
+
+	return true;
+}
+
+//触屏结束的时候发射子弹
+void GameScene::ccTouchEnded(cocos2d::CCTouch * touch,
+		cocos2d::CCEvent * event) {
+	CCPoint location = touch->getLocationInView();
+	location = CCDirector::sharedDirector()->convertToGL(location);
+
+	// Set up initial location of projectile
+	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+	CCSprite* pBullet = CCSprite::create("bullet.png",
+			CCRectMake(0, 0, 20 ,20));
+	pBullet->setPosition(ccp(20, winSize.height/2));
+
+	// Determinie offset of location to projectile
+	int offX = location.x - pBullet->getPosition().x;
+	int offY = location.y - pBullet->getPosition().y;
+
+	if (offX <= 0)
+		return;
+
+	this->addChild(pBullet);
+
+	// Determine where we wish to shoot the pBullet to
+	int realX = winSize.width + (pBullet->getContentSize().width / 2);
+	float ratio = (float) offY / (float) offX;
+	int realY = (realX * ratio) + pBullet->getPosition().y;
+	CCPoint realDest = ccp(realX, realY);
+
+	// Determine the length of how far we're shooting
+	int offRealX = realX - pBullet->getPosition().x;
+	int offRealY = realY - pBullet->getPosition().y;
+	float length = sqrtf((offRealX * offRealX) + (offRealY * offRealY));
+	float velocity = 480 / 1; // 480pixels/1sec
+	float realMoveDuration = length / velocity;
+
+	// Move pBullet to actual endpoint
+	pBullet->runAction(
+			CCSequence::create(CCMoveTo::create(realMoveDuration, realDest),
+					CCCallFuncN::create(this,
+							callfuncN_selector(GameScene::spriteMoveFinished)),
+					NULL));
+
+}
+
+void GameScene::ccTouchMoved(cocos2d::CCTouch *touch,
+		cocos2d::CCEvent * event) {
+	//移动精灵
+	CCPoint touchLocation = touch->getLocationInView();
+	CCPoint prevLocation = touch->getPreviousLocationInView();
+	touchLocation = CCDirector::sharedDirector()->convertToGL(touchLocation);
+	prevLocation = CCDirector::sharedDirector()->convertToGL(prevLocation);
+
+	//sprite -> setPosition
+	CCNode* pNode = getChildByTag(1000);
+	if (pNode != NULL) {
+		pNode->setPosition(touchLocation);
+	}
+
+}
+
+void GameScene::ccTouchCancelled(cocos2d::CCTouch* touch,
+		cocos2d::CCEvent* event) {
+
+}
+
+//随机添加Sprite
+void GameScene::addTarget() {
+
+	//TODO 随机选择敌机
+	int n = 1;
+	CCSprite *target = CCSprite::create("fire1.png");
+
+	//Determin where to spawm the target along the Y axis;
+	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+//	int minY = target->getContentSize().height / 2;
+//	int maxY = winSize.height - target->getContentSize().height / 2;
+	int minX = target->getContentSize().width / 2;
+	int maxX = winSize.width - target->getContentSize().width / 2;
+
+	int rangeX = maxX - minX;
+//	int rangeY = maxY - minY;
+//	int actualY = (rand() % rangeY) + minY;
+
+	int actualX = (rand() % rangeX) + minX;
+	//create the target slightly off-screen along the right edge and along a random position along the y axis as calculated
+//	target->setPosition(
+//			ccp(winSize.width + (target->getContentSize().width/2), actualY));
+	target->setPosition(ccp(
+			actualX, winSize.height + (target->getContentSize().height/2)));
+
+	//determine speed
+	int minDuration = (int) 2.0;
+	int maxDuratoin = (int) 4.0;
+	int rangeDuration = maxDuratoin - minDuration;
+	int actualDuration = (rand() % rangeDuration) + minDuration;
+
+	//create the actions
+//	CCFiniteTimeAction* actionMove = CCMoveTo::create((float) actualDuration,
+//			ccp(0-target->getContentSize().width/2, actualY));
+	CCFiniteTimeAction* actionMove = CCMoveTo::create((float) actualDuration,
+			ccp(actualX, 0-target->getContentSize().height/2));
+
+	//callFuncN selector
+	CCFiniteTimeAction* actionMoveDone = CCCallFuncN::create(this,
+			callfuncN_selector(GameScene::spriteDone));
+	target->runAction(CCSequence::create(actionMove, actionMoveDone, NULL));
+
+	addBoxBodyForSprite(target);
+	this->addChild(target, 1, 2);
+
+}
+
+//move finished,删除该节点
+void GameScene::spriteMoveFinished(CCNode* sender) {
+	CCSprite* sprite = (CCSprite *) sender;
+	this->removeChild(sprite, true);
+}
+
+//Game logic,动态添加节点
+void GameScene::gameLogic(float dt) {
+	this->addTarget();
+}
+
+//碰撞检测
+void GameScene::update(CCTime dt) {
+	//散播子弹
+	spawmBullets();
+}
+
+//为Sprite加上刚体
+void GameScene::addBoxBodyForSprite(cocos2d::CCSprite* sprite) {
+	//PTM_RATIO  ，这个数一般定义为： 32.0，在box 世界中 是以 米 为单位的，这里是将坐标兑换为box世界中的米，即除以 PTM_RATIO
+	// Create physic body for cat
+	b2PolygonShape polygon;
+	polygon.SetAsBox((float) sprite->getContentSize().width / PT_RATIO / 2,
+			(float) sprite->getContentSize().height / PT_RATIO / 2);
+
+	b2FixtureDef spriteShapeDef;
+	spriteShapeDef.shape = &polygon;
+	spriteShapeDef.density = 10.f;
+	spriteShapeDef.isSensor = true;   // 对象之间有碰撞检测但是又不想让它们有碰撞反应
+
+	b2BodyDef bd;
+	bd.type = b2_dynamicBody;
+	bd.position = b2Vec2((float) (sprite->getPosition().x / PT_RATIO),
+			(float) (sprite->getPosition().y / PT_RATIO));
+	bd.userData = sprite;
+
+	b2Body* spriteBody = world->CreateBody(&bd);
+	spriteBody->CreateFixture(&spriteShapeDef);
+
+}
+
+//散播子弹
+void GameScene::spawmBullets() {
+	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+	CCSprite* cat = CCSprite::create("bullet.png");
+
+	float minY = cat->getContentSize().height / 2;
+	float maxY = winSize.height - cat->getContentSize().height / 2;
+	float y = minY + rand() % (int) (maxY - minY);
+
+	float startX = winSize.width + cat->getContentSize().width / 2;
+	float endX = -cat->getContentSize().width / 2;
+
+	CCPoint startPos = ccp(startX, y);
+	CCPoint endPos = ccp(endX, y);
+
+	cat->setPosition(startPos);
+
+	cat->runAction(
+			CCSequence::create(CCMoveTo::create(10.f, endPos),
+					CCCallFuncN::create(this,
+							callfuncN_selector(GameScene::spriteDone)), NULL));
+
+	addBoxBodyForSprite(cat);
+	addChild(cat, 1, 2);
+}
+
+//销毁Sprite
+//TODO 调用
+void GameScene::spriteDone(CCNode* sender) {
+//	CCLog("Sprite Done");
+	// sprites被销毁的时候，我们需要销毁Box2d的body
+	CCSprite* sprite = dynamic_cast<CCSprite*>(sender);
+	if (sprite) {
+		b2Body* spriteBody = NULL;
+		for (b2Body* b = world->GetBodyList(); b; b = b->GetNext()) {
+			if (b->GetUserData() != NULL) {
+				CCSprite* curSprite = (CCSprite*) b->GetUserData();
+				if (curSprite == sprite) {
+//					CCLog("亲，碰撞了！！");
+					spriteBody = b;
+					removeChild(sprite, true);
+					world->DestroyBody(spriteBody);
+					break;
+				}
+			}
+
+			//if (spriteBody)
+			//{
+			//  world->DestroyBody(spriteBody);
+			//}
+
+			// removeChild(sprite, true);
+		}
+	}
+}
+
+//添加粒子发射器，粒子效果
+void GameScene::addParticle() {
 	CCParticleSystem* m_emitter;
 	m_emitter = new CCParticleSystemQuad();
 	m_emitter->initWithTotalParticles(50);
@@ -152,187 +396,60 @@ bool GameScene::init() {
 	// additive
 	m_emitter->setBlendAdditive(true);
 
-	//---------------------------------------------------------
-
-	//-------------------------------------碰撞检测
-	// create physic world
-	b2Vec2 gravity(0,0);
-	world = new b2World(gravity);
-	world->SetAllowSleeping(false);
-	//contact listener
-	this->contactListener = new MyContactListener();
-	world->SetContactListener(contactListener);
-
-//	  spawnCar();
-//
-//	  schedule(schedule_selector(HelloWorld::tick));
-//	  schedule(schedule_selector(HelloWorld::secondUpdate), 1.f);
-
-	return true;
 }
 
-//退出所有程序
-void GameScene::menuCloseCallback(CCObject* pSender) {
-	CCDirector::sharedDirector()->end();
+void GameScene::tick(float dt) {
+	if (world)
+		world->Step(dt, 10, 10);
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	exit(0);
-#endif
-}
-
-void GameScene::menuBackCallback(CCObject* pSender) {
-	CCDirector::sharedDirector()->replaceScene(NewMenuScene::scene());
-}
-
-//注册
-void GameScene::registerWithTouchDispatcher() {
-	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(
-			this, 0, true);
-}
-
-bool GameScene::ccTouchBegan(cocos2d::CCTouch *touch, cocos2d::CCEvent *event) {
-	//获取触点坐标
-	CCPoint touchLocation = touch->locationInView();
-	touchLocation = CCDirector::sharedDirector()->convertToGL(touchLocation);
-//	CCLog("touch began*********************");
-
-	return true;
-}
-
-//触屏结束的时候发射子弹
-void GameScene::ccTouchEnded(cocos2d::CCTouch * touch, cocos2d::CCEvent * event) {
-	CCPoint location = touch->locationInView();
-	location = CCDirector::sharedDirector()->convertToGL(location);
-
-
-	// Set up initial location of projectile
-	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
-	CCSprite* pBullet = CCSprite::spriteWithFile("bullet.png",
-			CCRectMake(0, 0, 20 ,20));
-	pBullet->setPosition(ccp(20, winSize.height/2));
-
-	// Determinie offset of location to projectile
-	int offX = location.x - pBullet->getPosition().x;
-	int offY = location.y - pBullet->getPosition().y;
-
-	if (offX <= 0)
-		return;
-
-	this->addChild(pBullet);
-
-	// Determine where we wish to shoot the pBullet to
-	int realX = winSize.width + (pBullet->getContentSize().width / 2);
-	float ratio = (float) offY / (float) offX;
-	int realY = (realX * ratio) + pBullet->getPosition().y;
-	CCPoint realDest = ccp(realX, realY);
-
-	// Determine the length of how far we're shooting
-	int offRealX = realX - pBullet->getPosition().x;
-	int offRealY = realY - pBullet->getPosition().y;
-	float length = sqrtf((offRealX * offRealX) + (offRealY * offRealY));
-	float velocity = 480 / 1; // 480pixels/1sec
-	float realMoveDuration = length / velocity;
-
-	// Move pBullet to actual endpoint
-	pBullet->runAction(CCSequence::actions(CCMoveTo::actionWithDuration(realMoveDuration, realDest),
-										   CCCallFuncN::actionWithTarget(this,
-										   callfuncN_selector(GameScene::spriteMoveFinished)),
-										   	   NULL));
-
-}
-
-void GameScene::ccTouchMoved(cocos2d::CCTouch *touch,
-		cocos2d::CCEvent * event) {
-	//移动精灵
-	CCPoint touchLocation = touch->locationInView();
-	CCPoint prevLocation = touch->previousLocationInView();
-	touchLocation = CCDirector::sharedDirector()->convertToGL(touchLocation);
-	prevLocation = CCDirector::sharedDirector()->convertToGL(prevLocation);
-
-	//sprite -> setPosition
-	CCNode* pNode = getChildByTag(1000);
-	if (pNode != NULL) {
-		pNode->setPosition(touchLocation);
+// 基于cocos2d的精灵位置来更新box2d的body位置
+	for (b2Body* b = world->GetBodyList(); b; b = b->GetNext()) {
+		if (b->GetUserData() != NULL) {
+			CCSprite* sprite = (CCSprite*) b->GetUserData();
+			if (sprite) {
+				b2Vec2 pt = b2Vec2((float) (sprite->getPosition().x / PT_RATIO),
+						(float) (sprite->getPosition().y / PT_RATIO));
+				float angle =
+						(float)CC_DEGREES_TO_RADIANS(sprite->getRotation());
+				b->SetTransform(pt, angle);
+			}
+		}
 	}
 
-}
+	std::list<b2Body*> toDestroy_list;
 
-void GameScene::ccTouchCancelled(cocos2d::CCTouch* touch,
-		cocos2d::CCEvent* event) {
+	for (std::list<MyContact>::iterator it =
+			contactListener->contact_list.begin();
+			it != contactListener->contact_list.end(); ++it) {
+		MyContact& contact = *it;
 
-}
+		b2Body* bodyA = contact.fixtureA->GetBody();
+		b2Body* bodyB = contact.fixtureB->GetBody();
 
-void GameScene::addTarget() {
+		CCSprite* sa = (CCSprite*) bodyA->GetUserData();
+		CCSprite* sb = (CCSprite*) bodyB->GetUserData();
+		if (sa && sb) {
+			if (sa->getTag() == 1 && sb->getTag() == 2)
+				toDestroy_list.push_back(bodyB);
+			else if (sa->getTag() == 2 && sa->getTag() == 1)
+				toDestroy_list.push_back(bodyA);
+		}
+	}
 
-	//TODO 随机选择敌机
-	int n = 1;
-	CCSprite *target = CCSprite::create("fire1.png");
+// Destroy contact item.
+	std::list<b2Body*>::iterator it = toDestroy_list.begin();
+	while (it != toDestroy_list.end()) {
+		if ((*it)->GetUserData() != NULL) {
+			CCSprite* sprite = (CCSprite*) ((*it)->GetUserData());
+			if (sprite) {
+				removeChild(sprite, true);
+			}
+			world->DestroyBody(*it);
+		}
 
-	//Determin where to spawm the target along the Y axis;
-	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
-//	int minY = target->getContentSize().height / 2;
-//	int maxY = winSize.height - target->getContentSize().height / 2;
-	int minX = target->getContentSize().width / 2;
-	int maxX = winSize.width - target->getContentSize().width / 2;
+		++it;
+	}
 
-	int rangeX = maxX - minX;
-//	int rangeY = maxY - minY;
-//	int actualY = (rand() % rangeY) + minY;
-
-	int actualX = (rand() % rangeX) + minX;
-	//create the target slightly off-screen along the right edge and along a random position along the y axis as calculated
-//	target->setPosition(
-//			ccp(winSize.width + (target->getContentSize().width/2), actualY));
-	target->setPosition(ccp(
-			actualX, winSize.height + (target->getContentSize().height/2)));
-
-	this->addChild(target);
-
-	//determine speed
-	int minDuration = (int) 2.0;
-	int maxDuratoin = (int) 4.0;
-	int rangeDuration = maxDuratoin - minDuration;
-	int actualDuration = (rand() % rangeDuration) + minDuration;
-
-	//create the actions
-//	CCFiniteTimeAction* actionMove = CCMoveTo::create((float) actualDuration,
-//			ccp(0-target->getContentSize().width/2, actualY));
-	CCFiniteTimeAction* actionMove = CCMoveTo::create((float) actualDuration,
-			ccp(actualX, 0-target->getContentSize().height/2));
-
-	//callFuncN selector
-	CCFiniteTimeAction* actionMoveDone = CCCallFuncN::create(this,
-			callfuncN_selector(GameScene::spriteMoveFinished));
-	target->runAction(CCSequence::create(actionMove, actionMoveDone, NULL));
-
-}
-
-//move finished,删除该节点
-void GameScene::spriteMoveFinished(CCNode* sender) {
-	CCSprite* sprite = (CCSprite *) sender;
-	this->removeChild(sprite, true);
-}
-
-//Game logic,动态添加节点
-void GameScene::gameLogic(float dt) {
-//    CCLog("add a move sprite...");
-	this->addTarget();
-}
-
-//TODO 每帧自动调用
-//碰撞检测
-void GameScene::update(CCTime dt)
-{
-
-//	CCLog("Game Scene update........");
-//	CCArray<CCSprite* > *projectilesToDelete = new CCArray<CCSprite*>;
-//	CCMutableArray<CCSprite*> *projectilesToDelete =  new CCMutableArray<CCSprite*>;
-
-	//记录碰撞后需要移除的Sprite
-	CCArray* projectilesToDelete =new CCArray();
-//	CCArray::
-
-
-//	CCArray<CCSprite*>::CCArrayIterator it, jt;  //迭代器
+	toDestroy_list.clear();
 
 }

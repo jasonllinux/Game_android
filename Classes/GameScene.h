@@ -11,12 +11,8 @@
 #include <Box2D/Box2D.h>
 #include "cocos2d.h"
 #include <list>
-#include <iostream>
-
 
 using std::list;
-
-//--------------- System.loadLibrary("box2d");----------------------------------------------------------------//
 
 class MyContact {
 public:
@@ -26,7 +22,6 @@ public:
 };
 
 // Contact listener
-//接触监听器
 class MyContactListener: public b2ContactListener {
 
 public:
@@ -57,10 +52,8 @@ public:
 		B2_NOT_USED(impulse);
 	}
 
+
 	std::list<MyContact> contact_list;
-
-private:
-
 };
 
 //-----------------------------------------------------------------------//
@@ -90,27 +83,29 @@ public:
 	virtual void ccTouchCancelled(cocos2d::CCTouch *touch,
 			cocos2d::CCEvent *event);
 
-	void addTarget();  //添加敌方部队
-	void spriteMoveFinished(CCNode* sender);
-	void gameLogic(float dt);
 
-	CREATE_FUNC(GameScene)
-	;
-	void update(CCTime dt);
+	CREATE_FUNC(GameScene);
+
 
 private:
 
-	//老的碰撞检测
-// CCMutableArray *  _shipLasers ;
-// int _nextShipLaser ;
-
-	//TODO 添加粒子
+	// 添加粒子
 	void addParticle();
+	//散播子弹
+	void spawmBullets();
 
 	//碰撞检测
 	b2World* world;
 	MyContactListener* contactListener;
 
+	void tick(float dt);
+	void update(CCTime dt);
+	void addBoxBodyForSprite(CCSprite* pSprite);
+	void spriteDone(CCNode* pSender);
+
+	void addTarget();  //添加敌方部队
+	void spriteMoveFinished(CCNode* sender);
+	void gameLogic(float dt);
 
 };
 
