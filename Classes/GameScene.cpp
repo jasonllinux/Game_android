@@ -225,7 +225,7 @@ void GameScene::addTarget() {
 	CCFiniteTimeAction* actionMoveDone = CCCallFuncN::create(this,
 			callfuncN_selector(GameScene::spriteDone));
 	target->runAction(CCSequence::create(actionMove, actionMoveDone, NULL));
-
+	//TODO 添加Boxbody
 	addBoxBodyForSprite(target);
 	this->addChild(target, 1, 2);
 
@@ -260,6 +260,7 @@ void GameScene::addBoxBodyForSprite(cocos2d::CCSprite* sprite) {
 	spriteShapeDef.shape = &polygon;
 	spriteShapeDef.density = 10.f;
 	spriteShapeDef.isSensor = true;   // 对象之间有碰撞检测但是又不想让它们有碰撞反应
+//	spriteShapeDef.isSensor = false;
 
 	b2BodyDef bd;
 	bd.type = b2_dynamicBody;
@@ -293,9 +294,9 @@ void GameScene::spawmBullets() {
 			CCSequence::create(CCMoveTo::create(10.f, endPos),
 					CCCallFuncN::create(this,
 							callfuncN_selector(GameScene::spriteDone)), NULL));
-
+	//TODO 添加BoxBody
 	addBoxBodyForSprite(cat);
-	addChild(cat, 1, 2);
+	addChild(cat, 1, 1);
 }
 
 //销毁Sprite
@@ -310,6 +311,7 @@ void GameScene::spriteDone(CCNode* sender) {
 			if (b->GetUserData() != NULL) {
 				CCSprite* curSprite = (CCSprite*) b->GetUserData();
 				if (curSprite == sprite) {
+
 //					CCLog("亲，碰撞了！！");
 					spriteBody = b;
 					removeChild(sprite, true);
@@ -398,9 +400,11 @@ void GameScene::addParticle() {
 
 }
 
+//没周期检测碰撞 判断 销毁实体
 void GameScene::tick(float dt) {
-	if (world)
+	if (world) {
 		world->Step(dt, 10, 10);
+	}
 
 // 基于cocos2d的精灵位置来更新box2d的body位置
 	for (b2Body* b = world->GetBodyList(); b; b = b->GetNext()) {
@@ -410,7 +414,7 @@ void GameScene::tick(float dt) {
 				b2Vec2 pt = b2Vec2((float) (sprite->getPosition().x / PT_RATIO),
 						(float) (sprite->getPosition().y / PT_RATIO));
 				float angle =
-						(float)CC_DEGREES_TO_RADIANS(sprite->getRotation());
+						(float) CC_DEGREES_TO_RADIANS(sprite->getRotation());
 				b->SetTransform(pt, angle);
 			}
 		}
@@ -418,9 +422,7 @@ void GameScene::tick(float dt) {
 
 	std::list<b2Body*> toDestroy_list;
 
-	for (std::list<MyContact>::iterator it =
-			contactListener->contact_list.begin();
-			it != contactListener->contact_list.end(); ++it) {
+	for (std::list<MyContact>::iterator it = contactListener->contact_list.begin(); it != contactListener->contact_list.end(); ++it) {
 		MyContact& contact = *it;
 
 		b2Body* bodyA = contact.fixtureA->GetBody();
@@ -428,15 +430,20 @@ void GameScene::tick(float dt) {
 
 		CCSprite* sa = (CCSprite*) bodyA->GetUserData();
 		CCSprite* sb = (CCSprite*) bodyB->GetUserData();
+
 		if (sa && sb) {
-			if (sa->getTag() == 1 && sb->getTag() == 2)
+			if (sa->getTag() == 1 && sb->getTag() == 2) {
+				//TODO 只执行这个,有问题
+				CCLog("To Destroy sb");
 				toDestroy_list.push_back(bodyB);
-			else if (sa->getTag() == 2 && sa->getTag() == 1)
+			} else if (sa->getTag() == 2 && sa->getTag() == 1) {
+				CCLog("To Destroy sa");
 				toDestroy_list.push_back(bodyA);
+			}
 		}
 	}
 
-// Destroy contact item.
+	//销毁碰撞的实体
 	std::list<b2Body*>::iterator it = toDestroy_list.begin();
 	while (it != toDestroy_list.end()) {
 		if ((*it)->GetUserData() != NULL) {
@@ -446,7 +453,6 @@ void GameScene::tick(float dt) {
 			}
 			world->DestroyBody(*it);
 		}
-
 		++it;
 	}
 
