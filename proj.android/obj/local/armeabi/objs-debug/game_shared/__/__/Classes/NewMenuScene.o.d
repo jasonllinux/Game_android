@@ -256,7 +256,10 @@ obj/local/armeabi/objs-debug/game_shared/__/__/Classes//NewMenuScene.o: \
  /home/arch/cocos2d-x/Game/proj.android/../../external/Box2D/../Box2D/Dynamics/Joints/b2PulleyJoint.h \
  /home/arch/cocos2d-x/Game/proj.android/../../external/Box2D/../Box2D/Dynamics/Joints/b2RevoluteJoint.h \
  /home/arch/cocos2d-x/Game/proj.android/../../external/Box2D/../Box2D/Dynamics/Joints/b2RopeJoint.h \
- /home/arch/cocos2d-x/Game/proj.android/../../external/Box2D/../Box2D/Dynamics/Joints/b2WeldJoint.h
+ /home/arch/cocos2d-x/Game/proj.android/../../external/Box2D/../Box2D/Dynamics/Joints/b2WeldJoint.h \
+ jni/../../Classes//Contact/MyContact.h \
+ jni/../../Classes//Contact/MyContactListener.h \
+ jni/../../Classes//Contact/MyContact.h
 
 jni/../../Classes//NewMenuScene.h:
 
@@ -775,3 +778,9 @@ jni/../../Classes//GameScene.h:
 /home/arch/cocos2d-x/Game/proj.android/../../external/Box2D/../Box2D/Dynamics/Joints/b2RopeJoint.h:
 
 /home/arch/cocos2d-x/Game/proj.android/../../external/Box2D/../Box2D/Dynamics/Joints/b2WeldJoint.h:
+
+jni/../../Classes//Contact/MyContact.h:
+
+jni/../../Classes//Contact/MyContactListener.h:
+
+jni/../../Classes//Contact/MyContact.h:

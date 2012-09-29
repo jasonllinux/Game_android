@@ -10,6 +10,7 @@
 #include "GameScene.h"
 
 #include "SimpleAudioEngine.h"
+#include "Contact/MyContactListener.h"
 
 using namespace cocos2d;
 using namespace CocosDenshion;

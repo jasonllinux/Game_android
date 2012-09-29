@@ -11,50 +11,52 @@
 #include <Box2D/Box2D.h>
 #include "cocos2d.h"
 #include <list>
+#include "Contact/MyContact.h"
+#include "Contact/MyContactListener.h"
 
 using std::list;
 
-class MyContact {
-public:
-	//定制器
-	b2Fixture* fixtureA;
-	b2Fixture* fixtureB;
-};
+//class MyContact {
+//public:
+//	//定制器
+//	b2Fixture* fixtureA;
+//	b2Fixture* fixtureB;
+//};
 
 // Contact listener
-class MyContactListener: public b2ContactListener {
-
-public:
-	// Callbacks for derived classes.
-	virtual void BeginContact(b2Contact* contact) {
-		if (contact) {
-			MyContact mc;
-			mc.fixtureA = contact->GetFixtureA();
-			mc.fixtureB = contact->GetFixtureB();
-
-			contact_list.push_back(mc);
-		}
-		B2_NOT_USED(contact);
-	}
+//class MyContactListener: public b2ContactListener {
 //
-	virtual void EndContact(b2Contact* contact) {
-		contact_list.clear();
-		B2_NOT_USED(contact);
-	}
-
-	virtual void PreSolve(b2Contact* contact, const b2Manifold* oldManifold) {
-		B2_NOT_USED(contact);
-		B2_NOT_USED(oldManifold);
-	}
-
-	virtual void PostSolve(const b2Contact* contact, const b2ContactImpulse* impulse) {
-		B2_NOT_USED(contact);
-		B2_NOT_USED(impulse);
-	}
-
-
-	std::list<MyContact> contact_list;
-};
+//public:
+//	// Callbacks for derived classes.
+//	virtual void BeginContact(b2Contact* contact) {
+//		if (contact) {
+//			MyContact mc;
+//			mc.fixtureA = contact->GetFixtureA();
+//			mc.fixtureB = contact->GetFixtureB();
+//
+//			contact_list.push_back(mc);
+//		}
+//		B2_NOT_USED(contact);
+//	}
+////
+//	virtual void EndContact(b2Contact* contact) {
+//		contact_list.clear();
+//		B2_NOT_USED(contact);
+//	}
+//
+//	virtual void PreSolve(b2Contact* contact, const b2Manifold* oldManifold) {
+//		B2_NOT_USED(contact);
+//		B2_NOT_USED(oldManifold);
+//	}
+//
+//	virtual void PostSolve(const b2Contact* contact, const b2ContactImpulse* impulse) {
+//		B2_NOT_USED(contact);
+//		B2_NOT_USED(impulse);
+//	}
+//
+//
+//	std::list<MyContact> contact_list;
+//};
 
 //-----------------------------------------------------------------------//
 class GameScene: public cocos2d::CCLayer {
@@ -88,15 +90,14 @@ public:
 
 
 private:
+	//碰撞检测
+	b2World* world;
+	MyContactListener* contactListener;
 
 	// 添加粒子
 	void addParticle();
 	//散播子弹
 	void spawmBullets();
-
-	//碰撞检测
-	b2World* world;
-	MyContactListener* contactListener;
 
 	void tick(float dt);
 	void update(CCTime dt);
