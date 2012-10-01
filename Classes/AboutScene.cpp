@@ -5,17 +5,18 @@
 //  Created by mac on 12-8-7.
 //
 //
-#include "cocos2d.h"
+#include <cocos2d.h>
+
 #include "AboutScene.h"
-#include "NewMenuScene.h"
+#include "MenuScene.h"
 //#include "SimpleAudioEngine.h"
 
 using namespace cocos2d;
-//using namespace CocosDenshion;
 
 CCScene* AboutScene::scene()
 {
     CCScene* scene = CCScene::create();
+
 
     AboutScene* layer = AboutScene::create();
 
@@ -46,6 +47,7 @@ bool AboutScene::init()
 
     //  TODO 坐标有问题
     CCMenuItemFont* back = CCMenuItemFont::create("Back", this, menu_selector(AboutScene::menuBackCallback));
+
     back->setPosition(ccp(50, 100));
 
     CCMenu *pMenu = CCMenu::create(back, NULL);
@@ -58,8 +60,7 @@ bool AboutScene::init()
 //TODO loadScene
 void AboutScene::menuBackCallback(CCObject* pSender)
 {
-    CCDirector::sharedDirector()->replaceScene(NewMenuScene::scene());
-
+    CCDirector::sharedDirector()->replaceScene(MenuScene::scene());
 
 }
 

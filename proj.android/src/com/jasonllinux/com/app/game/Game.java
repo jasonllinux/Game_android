@@ -104,7 +104,5 @@ public class Game extends Cocos2dxActivity{
 	
      static {
          System.loadLibrary("game");
-         //TODO 需要其他的么？
-//         System.loadLibrary("box2d");
      }
 }

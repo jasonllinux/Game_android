@@ -210,7 +210,7 @@ obj/local/armeabi/objs-debug/game_shared/__/__/Classes//AppDelegate.o: \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/CCDrawingPrimitives.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/CCScheduler.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/support/data_support/uthash.h \
- jni/../../Classes//HelloWorldScene.h jni/../../Classes//NewMenuScene.h \
+ jni/../../Classes//Test/HelloWorldScene.h jni/../../Classes//MenuScene.h \
  /home/arch/cocos2d-x/Game/proj.android/../../CocosDenshion/android/../include/SimpleAudioEngine.h \
  /home/arch/cocos2d-x/Game/proj.android/../../CocosDenshion/android/../include/Export.h
 
@@ -636,9 +636,9 @@ jni/../../Classes//AppDelegate.h:
 
 /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/support/data_support/uthash.h:
 
-jni/../../Classes//HelloWorldScene.h:
+jni/../../Classes//Test/HelloWorldScene.h:
 
-jni/../../Classes//NewMenuScene.h:
+jni/../../Classes//MenuScene.h:
 
 /home/arch/cocos2d-x/Game/proj.android/../../CocosDenshion/android/../include/SimpleAudioEngine.h:
 

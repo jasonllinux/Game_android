@@ -209,7 +209,7 @@ obj/local/armeabi/objs-debug/game_shared/__/__/Classes//AboutScene.o: \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/CCDrawingPrimitives.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/CCScheduler.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/support/data_support/uthash.h \
- jni/../../Classes//AboutScene.h jni/../../Classes//NewMenuScene.h
+ jni/../../Classes//AboutScene.h jni/../../Classes//MenuScene.h
 
 /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/include/cocos2d.h:
 
@@ -631,4 +631,4 @@ obj/local/armeabi/objs-debug/game_shared/__/__/Classes//AboutScene.o: \
 
 jni/../../Classes//AboutScene.h:
 
-jni/../../Classes//NewMenuScene.h:
+jni/../../Classes//MenuScene.h:

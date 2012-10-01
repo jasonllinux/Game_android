@@ -1,5 +1,5 @@
 obj/local/armeabi/objs-debug/game_shared/__/__/Classes//GameScene.o: \
- jni/../../Classes//GameScene.cpp jni/../../Classes//NewMenuScene.h \
+ jni/../../Classes//GameScene.cpp jni/../../Classes//MenuScene.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/include/cocos2d.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/include/ccConfig.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCPlatformConfig.h \
@@ -260,7 +260,7 @@ obj/local/armeabi/objs-debug/game_shared/__/__/Classes//GameScene.o: \
  /home/arch/cocos2d-x/Game/proj.android/../../CocosDenshion/android/../include/SimpleAudioEngine.h \
  /home/arch/cocos2d-x/Game/proj.android/../../CocosDenshion/android/../include/Export.h
 
-jni/../../Classes//NewMenuScene.h:
+jni/../../Classes//MenuScene.h:
 
 /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/include/cocos2d.h:
 

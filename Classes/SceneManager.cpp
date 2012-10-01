@@ -10,7 +10,7 @@
 //include some scenes
 //#include "About.h"
 //#include "GameScene.h"
-#include "NewMenuScene.h"
+#include "MenuScene.h"
 
 void SceneManager::loadScene(SceneType type) {
 
@@ -28,7 +28,7 @@ void SceneManager::loadScene(SceneType type) {
             break;
         case BACK_TO_HOME:
             CCLog("back to home");
-            CCDirector::sharedDirector()->replaceScene(NewMenuScene::scene());
+            CCDirector::sharedDirector()->replaceScene(MenuScene::scene());
             break;
         default:
             break;

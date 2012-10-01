@@ -13,7 +13,6 @@ obj/local/armeabi/objs-debug/game_shared/hellocpp/main.o: \
  /opt/android-ndk/sources/cxx-stl/gnu-libstdc++/include/string \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCPlatformMacros.h \
  /opt/android-ndk/platforms/android-14/arch-arm/usr/include/android/log.h \
- jni/../../Classes/HelloWorldScene.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/include/cocos2d.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/include/ccConfig.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/actions/CCAction.h \
@@ -214,8 +213,6 @@ jni/../../Classes/AppDelegate.h:
 /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCPlatformMacros.h:
 
 /opt/android-ndk/platforms/android-14/arch-arm/usr/include/android/log.h:
-
-jni/../../Classes/HelloWorldScene.h:
 
 /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/include/cocos2d.h:
 

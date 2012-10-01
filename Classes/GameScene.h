@@ -9,10 +9,12 @@
 #define GAMESCENE_H_
 
 #include <Box2D/Box2D.h>
-#include "cocos2d.h"
+#include <cocos2d.h>
 #include <list>
+
 #include "Contact/MyContact.h"
 #include "Contact/MyContactListener.h"
+
 
 using std::list;
 

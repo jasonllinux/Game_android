@@ -5,8 +5,7 @@
  *      Author: arch
  */
 
-//#include <Box2D/Box2D.h>
-#include "NewMenuScene.h"
+#include "MenuScene.h"
 #include "GameScene.h"
 
 #include "SimpleAudioEngine.h"
@@ -104,7 +103,7 @@ void GameScene::menuCloseCallback(CCObject* pSender) {
 }
 
 void GameScene::menuBackCallback(CCObject* pSender) {
-	CCDirector::sharedDirector()->replaceScene(NewMenuScene::scene());
+	CCDirector::sharedDirector()->replaceScene(MenuScene::scene());
 }
 
 //注册
@@ -300,9 +299,12 @@ void GameScene::spawmBullets() {
 	addChild(cat, 1, 1);
 }
 
+
+
 //销毁Sprite
 //TODO 调用
 void GameScene::spriteDone(CCNode* sender) {
+
 //	CCLog("Sprite Done");
 	// sprites被销毁的时候，我们需要销毁Box2d的body
 	CCSprite* sprite = dynamic_cast<CCSprite*>(sender);
@@ -460,3 +462,4 @@ void GameScene::tick(float dt) {
 	toDestroy_list.clear();
 
 }
+

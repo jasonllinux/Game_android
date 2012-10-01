@@ -8,7 +8,7 @@
 #ifndef SCENEMANAGER_H_
 #define SCENEMANAGER_H_
 
-#include "cocos2d.h"
+#include <cocos2d.h>
 using namespace cocos2d;
 
 //存放一些于游戏的常量
