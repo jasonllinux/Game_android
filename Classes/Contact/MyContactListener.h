@@ -11,9 +11,15 @@
 #include <Box2D/Box2D.h>
 #include "MyContact.h"
 
+using std::list;
+
 class MyContactListener: public b2ContactListener {
 
 public:
+	MyContactListener() {
+		contact_list = list<MyContact>();
+	}
+
 	virtual ~MyContactListener() {
 		contact_list.clear();
 	}
@@ -45,7 +51,7 @@ public:
 	}
 
 
-	std::list<MyContact> contact_list;
+	list<MyContact> contact_list;
 };
 
 #endif /* MYCONTACTLISTENERA_H_ */

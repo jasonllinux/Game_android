@@ -1,23 +1,21 @@
 obj/local/armeabi/objs-debug/game_shared/__/__/Classes//AppDelegate.o: \
- jni/../../Classes//AppDelegate.cpp jni/../../Classes//AppDelegate.h \
- /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/android/CCApplication.h \
- /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCCommon.h \
- /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCPlatformMacros.h \
- /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/include/ccConfig.h \
- /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCPlatformConfig.h \
- /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCPlatformConfig.h \
- /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/android/CCPlatformDefine.h \
- /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCApplicationProtocol.h \
+ jni/../../Classes//AppDelegate.cpp \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/include/cocos2d.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/include/ccConfig.h \
+ /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCPlatformConfig.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/actions/CCAction.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/cocoa/CCObject.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCPlatformMacros.h \
+ /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/include/ccConfig.h \
+ /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCPlatformConfig.h \
+ /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/android/CCPlatformDefine.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/cocoa/CCGeometry.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/cocoa/CCObject.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/actions/CCActionInterval.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/base_nodes/CCNode.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/include/ccMacros.h \
+ /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCCommon.h \
+ /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCPlatformMacros.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/android/CCStdC.h \
  /opt/android-ndk/platforms/android-14/arch-arm/usr/include/math.h \
  /opt/android-ndk/platforms/android-14/arch-arm/usr/include/sys/cdefs.h \
@@ -173,6 +171,7 @@ obj/local/armeabi/objs-debug/game_shared/__/__/Classes//AppDelegate.o: \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCThread.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/android/CCAccelerometer.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/android/CCApplication.h \
+ /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCApplicationProtocol.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/android/CCEGLView.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCEGLViewProtocol.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/android/CCGL.h \
@@ -210,37 +209,31 @@ obj/local/armeabi/objs-debug/game_shared/__/__/Classes//AppDelegate.o: \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/CCDrawingPrimitives.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/CCScheduler.h \
  /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/support/data_support/uthash.h \
- jni/../../Classes//Test/HelloWorldScene.h jni/../../Classes//MenuScene.h \
  /home/arch/cocos2d-x/Game/proj.android/../../CocosDenshion/android/../include/SimpleAudioEngine.h \
- /home/arch/cocos2d-x/Game/proj.android/../../CocosDenshion/android/../include/Export.h
-
-jni/../../Classes//AppDelegate.h:
-
-/home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/android/CCApplication.h:
-
-/home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCCommon.h:
-
-/home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCPlatformMacros.h:
-
-/home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/include/ccConfig.h:
-
-/home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCPlatformConfig.h:
-
-/home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCPlatformConfig.h:
-
-/home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/android/CCPlatformDefine.h:
-
-/home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCApplicationProtocol.h:
+ /home/arch/cocos2d-x/Game/proj.android/../../CocosDenshion/android/../include/Export.h \
+ jni/../../Classes//AppDelegate.h \
+ /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/android/CCApplication.h \
+ jni/../../Classes//Test/HelloWorldScene.h \
+ jni/../../Classes//Scene/SceneManager.h \
+ jni/../../Classes//Scene/MenuScene.h
 
 /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/include/cocos2d.h:
 
 /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/include/ccConfig.h:
+
+/home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCPlatformConfig.h:
 
 /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/actions/CCAction.h:
 
 /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/cocoa/CCObject.h:
 
 /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCPlatformMacros.h:
+
+/home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/include/ccConfig.h:
+
+/home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCPlatformConfig.h:
+
+/home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/android/CCPlatformDefine.h:
 
 /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/cocoa/CCGeometry.h:
 
@@ -251,6 +244,10 @@ jni/../../Classes//AppDelegate.h:
 /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/base_nodes/CCNode.h:
 
 /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/include/ccMacros.h:
+
+/home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCCommon.h:
+
+/home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCPlatformMacros.h:
 
 /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/android/CCStdC.h:
 
@@ -562,6 +559,8 @@ jni/../../Classes//AppDelegate.h:
 
 /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/android/CCApplication.h:
 
+/home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCApplicationProtocol.h:
+
 /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/android/CCEGLView.h:
 
 /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/CCEGLViewProtocol.h:
@@ -636,10 +635,16 @@ jni/../../Classes//AppDelegate.h:
 
 /home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/support/data_support/uthash.h:
 
-jni/../../Classes//Test/HelloWorldScene.h:
-
-jni/../../Classes//MenuScene.h:
-
 /home/arch/cocos2d-x/Game/proj.android/../../CocosDenshion/android/../include/SimpleAudioEngine.h:
 
 /home/arch/cocos2d-x/Game/proj.android/../../CocosDenshion/android/../include/Export.h:
+
+jni/../../Classes//AppDelegate.h:
+
+/home/arch/cocos2d-x/Game/proj.android/../../cocos2dx/platform/android/CCApplication.h:
+
+jni/../../Classes//Test/HelloWorldScene.h:
+
+jni/../../Classes//Scene/SceneManager.h:
+
+jni/../../Classes//Scene/MenuScene.h:

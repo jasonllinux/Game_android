@@ -1,16 +1,12 @@
-#include "AppDelegate.h"
-
 #include <cocos2d.h>
+#include <SimpleAudioEngine.h>
+#include "AppDelegate.h"
 #include "Test/HelloWorldScene.h"
+#include "Scene/SceneManager.h"
+#include  "Scene/MenuScene.h"
 
-//#include "SceneManager.h"
-#include  "MenuScene.h"
-//#include "GameScene.h"
 
-#include "SimpleAudioEngine.h"
-//#include "CCDirector.h"
-//#include "SimpleAudioEngine.h"
-
+using namespace CocosDenshion;
 
 USING_NS_CC;
 
@@ -37,12 +33,8 @@ bool AppDelegate::applicationDidFinishLaunching()
     pDirector->setAnimationInterval(1.0 / 60);
 
 
-    // create a scene. it's an autorelease object
-//    CCScene *pScene = HelloWorld::scene();
-//    CCScene *pScene = GameScene::scene();
     CCScene *pScene = MenuScene::scene();
 
-    // run
     pDirector->runWithScene(pScene);
 
     return true;
@@ -53,7 +45,7 @@ void AppDelegate::applicationDidEnterBackground()
 {
     CCDirector::sharedDirector()->pause();
 
-//    SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
+    SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
 
 }
 
@@ -61,7 +53,7 @@ void AppDelegate::applicationDidEnterBackground()
 void AppDelegate::applicationWillEnterForeground()
 {
     CCDirector::sharedDirector()->resume();
-    
-    // if you use SimpleAudioEngine, it must resume here
+
+    SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
 
 }
