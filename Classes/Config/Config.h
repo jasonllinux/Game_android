@@ -10,7 +10,7 @@
 
 #include <cocos2d.h>
 
-using namespace cocos2d;
+
 
 class Config {
 public:
@@ -19,11 +19,17 @@ public:
 	const static int TAG_PLANE_OTHER = 12;
 	const static int TAG_BULLET = 13;
 
-	Config();
+	static Config* sharedConfig();
 	virtual ~Config();
 
-	//单例模式
-	Config* sharedConfig();
+	void release();
+	void init();
+	void initFromXML();
+	bool getConfig();
+
+	void readConfig();
+	void saveConfig();
+	void showConfig();
 
 
 
@@ -38,11 +44,14 @@ public:
 
 	//
 
+
 private :
+	Config();
+	static Config* instance;
 	CCSize winSize;
 	//init 初始化
-	boolean init;
-	void init();
+//	boolean init;
+//	void init();
 
 };
 
