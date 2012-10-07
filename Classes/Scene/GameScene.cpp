@@ -10,6 +10,7 @@
 
 #include "SimpleAudioEngine.h"
 #include "Contact/MyContactListener.h"
+#include "Utilty/UILayer.h"
 
 using namespace cocos2d;
 using namespace CocosDenshion;
@@ -48,17 +49,34 @@ bool GameScene::init() {
 
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
 
-	//TODO 添加背景
+	//添加背景
 	CCSprite* pSprite = CCSprite::create("back_game.png");
 	pSprite->setPosition(ccp(size.width/2, size.height/2));
 	this->addChild(pSprite, 0);
 
-	//TODO 添加精灵
+	//TODO 添加血条
+	UILayer* ui = new UILayer();
+	this->addChild(ui, 0);
+	//TODO 没周期更新函数
+	//TODO 判断reduce 判断collision
+	/**
+	 *
+if(! isreduce && iscollision(gameplayer,enemy)){
+  CCActionInterval*  action = CCBlink::actionWithDuration(5, 10);
+  gameplayer->runAction(action);
+  schedule(schedule_selector(MapScene::resetreduce), 5.0f);
+  isreduce = true;
+  hmove = 0;
+  ui->setlife(ui->getlife() - 5);
+}
+	 *
+	 */
+
+	//添加精灵
 	CCSprite* plane = CCSprite::create("plane.png");
 	plane->setPosition(ccp(60,60));
 	this->addChild(plane, 2, 1000);
 
-	//TODO 添加动作
 
 	//添加返回按钮
 	CCMenuItemFont *backMenu = CCMenuItemFont::create("Back", this,
@@ -112,8 +130,7 @@ void GameScene::menuBackCallback(CCObject* pSender) {
 
 //注册
 void GameScene::registerWithTouchDispatcher() {
-	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(
-			this, 0, true);
+	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
 }
 
 bool GameScene::ccTouchBegan(cocos2d::CCTouch *touch, cocos2d::CCEvent *event) {
