@@ -16,10 +16,17 @@ enum GameState {
 	GAME_OVER,
 };
 
-//TODO Node的Tag值
+//Node的Tag值
 enum NodeTag {
+	//背景图片
+	BACK_LAYER1 = 10,
+	BACK_LAYER2 = 11,
+	BACK_LAYER3 = 12,
+
+	//精灵类
 	PLANE_SELF = 1000,
 	PLANE_OTHER = 2000,
+
 };
 
 

@@ -32,7 +32,7 @@ void UILayer::draw() {
 //	glColorMask(0,0,0,1);
 	glLineWidth(10);
 	ccDrawLine(CCPointMake(5, winSize.height-10), CCPointMake(5+life, winSize.height-10));
-	glBlendColor(0.0,0.0,0.0,1.0);
+	glBlendColor(1.0,0.0,0.0,1.0);
 //	glColorMask(0,0,0,1);
 	glLineWidth(5);
 	ccDrawLine(CCPointMake(10, winSize.height-11), CCPointMake(10+life, winSize.height-11));

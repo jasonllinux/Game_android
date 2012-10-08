@@ -11,6 +11,7 @@
 #include "SimpleAudioEngine.h"
 #include "Contact/MyContactListener.h"
 #include "Utilty/UILayer.h"
+#include "Config/GameConstants.h"
 
 using namespace cocos2d;
 using namespace CocosDenshion;
@@ -48,11 +49,16 @@ bool GameScene::init() {
 	}
 
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
-
+	//720 1184
 	//添加背景
-	CCSprite* pSprite = CCSprite::create("back_game.png");
-	pSprite->setPosition(ccp(size.width/2, size.height/2));
-	this->addChild(pSprite, 0);
+	backSprite1 = CCSprite::create("back1.jpg");
+	backSprite2 = CCSprite::create("back2.png");
+	backSprite1->setAnchorPoint(ccp(0, 0));
+	backSprite2->setAnchorPoint(ccp(0, 0));
+	backSprite1->setPosition(ccp(0, 0));
+	backSprite2->setPosition(ccp(0, size.height));
+	this->addChild(backSprite1, 0, BACK_LAYER1);
+	this->addChild(backSprite2, 0, BACK_LAYER2);
 
 	//TODO 添加血条
 	UILayer* ui = new UILayer();
@@ -72,6 +78,9 @@ if(! isreduce && iscollision(gameplayer,enemy)){
 	 *
 	 */
 
+
+	//TODO 添加life or 子弹库（并排图片）
+
 	//添加精灵
 	CCSprite* plane = CCSprite::create("plane.png");
 	plane->setPosition(ccp(60,60));
@@ -79,8 +88,7 @@ if(! isreduce && iscollision(gameplayer,enemy)){
 
 
 	//添加返回按钮
-	CCMenuItemFont *backMenu = CCMenuItemFont::create("Back", this,
-			menu_selector(GameScene::menuBackCallback));
+	CCMenuItemFont *backMenu = CCMenuItemFont::create("Back", this, menu_selector(GameScene::menuBackCallback));
 	//exit->setAnchorPoint(CCPointZero);
 	backMenu->setPosition(ccp(size.width/2,size.height/2));
 
@@ -106,10 +114,12 @@ if(! isreduce && iscollision(gameplayer,enemy)){
 
 //	  spawnCar();
 //
+	schedule(schedule_selector(GameScene::updateBackGround));
 	schedule(schedule_selector(GameScene::tick));
 	this->schedule(schedule_selector(GameScene::gameLogic), 1.0);
 	this->schedule(schedule_selector(GameScene::update), 1.f);
 
+	//TODO import 不然触屏无法使用
 	this->setTouchEnabled(true);
 
 	return true;
@@ -481,6 +491,31 @@ void GameScene::tick(float dt) {
 	}
 
 	toDestroy_list.clear();
+
+}
+
+//每周期更新滑动背景
+void GameScene::updateBackGround() {
+	int scroll_speed = 3;
+	CCSize size = CCDirector::sharedDirector()->getWinSize();
+//	CCLog("win size(width) : %d",size.width);
+//	CCLog("win size(height) : %d",size.height);
+
+	CCPoint backPoint1 = backSprite1->getPosition();
+	CCPoint backPoint2 = backSprite2->getPosition();
+	CCLog("backPoint1  %f",backPoint1.y);
+	CCLog("backPoint2  %f",backPoint2.y);
+	backSprite1->setPosition(ccp(backPoint1.x, backPoint1.y-scroll_speed));
+	backSprite2->setPosition(ccp(backPoint2.x, backPoint2.y-scroll_speed));
+////
+	if(backPoint2.y < 0) {
+		float temp = backPoint2.y + size.height;
+		backSprite1->setPosition(ccp(backPoint1.x, temp));
+	}
+	if(backPoint1.y < 0) {
+		float temp = backPoint1.y + size.height;
+		backSprite2->setPosition(ccp(backPoint2.x, temp));
+	}
 
 }
 

@@ -87,6 +87,7 @@ public:
 	virtual void ccTouchCancelled(cocos2d::CCTouch *touch,
 			cocos2d::CCEvent *event);
 
+	void updateBackGround();
 
 	CREATE_FUNC(GameScene);
 
@@ -95,6 +96,10 @@ private:
 	//碰撞检测
 	b2World* world;
 	MyContactListener* contactListener;
+
+	CCSprite* backSprite1;
+	CCSprite* backSprite2;
+	CCSprite* backSprite3;
 
 	// 添加粒子
 	void addParticle();
@@ -109,6 +114,8 @@ private:
 	void addTarget();  //添加敌方部队
 	void spriteMoveFinished(CCNode* sender);
 	void gameLogic(float dt);
+
+
 
 };
 
