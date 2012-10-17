@@ -52,7 +52,7 @@ bool GameScene::init() {
 	//720 1184
 	//添加背景
 	backSprite1 = CCSprite::create("back1.jpg");
-	backSprite2 = CCSprite::create("back2.png");
+	backSprite2 = CCSprite::create("back1.jpg");
 	backSprite1->setAnchorPoint(ccp(0, 0));
 	backSprite2->setAnchorPoint(ccp(0, 0));
 	backSprite1->setPosition(ccp(0, 0));
@@ -82,9 +82,9 @@ if(! isreduce && iscollision(gameplayer,enemy)){
 	//TODO 添加life or 子弹库（并排图片）
 
 	//添加精灵
-	CCSprite* plane = CCSprite::create("plane.png");
+	plane = CCSprite::create("plane.png");
 	plane->setPosition(ccp(60,60));
-	this->addChild(plane, 2, 1000);
+	this->addChild(plane, 2, TAG_HERO);
 
 
 	//添加返回按钮
@@ -148,70 +148,111 @@ bool GameScene::ccTouchBegan(cocos2d::CCTouch *touch, cocos2d::CCEvent *event) {
 	CCPoint touchLocation = touch->getLocationInView();
 	touchLocation = CCDirector::sharedDirector()->convertToGL(touchLocation);
 
+	m_tBeginPos = touchLocation; //new m_tBeginPos;
+	//获取Hero TODO 用tag获取
+	CCPoint heroLocation = plane->getPosition();
+	CCSize heroSize = plane->getContentSize();
+
+//	if((touchLocation.x>heroLocation.x-heroSize.width/2) && (touchLocation.x<heroLocation.x+heroSize.width/2)
+//			&& touchLocation.y>heroLocation.y && touchLocation.y<heroLocation.y+heroSize.height) {
+//	if(true){
+////		CCLog("满足条件");
+//		stepIndex = -5;
+//		xdelta = touchLocation.x - heroLocation.x;
+//		ydelta = touchLocation.y - heroLocation.y;
+//		if(abs(xdelta)>SPEED_HERO_X) {
+//			xdelta = (xdelta/abs(xdelta))*SPEED_HERO_X;
+//		}
+//		if(abs(ydelta)>SPEED_HERO_Y) {
+//			ydelta = (ydelta/abs(ydelta))*SPEED_HERO_Y;
+//		}
+//		CCLog("xdelta : %f", xdelta);
+//		CCLog("ydelta : %f", ydelta);
+//	}
 	return true;
 }
 
-//触屏结束的时候发射子弹
-void GameScene::ccTouchEnded(cocos2d::CCTouch * touch,
-		cocos2d::CCEvent * event) {
-	CCPoint location = touch->getLocationInView();
-	location = CCDirector::sharedDirector()->convertToGL(location);
-
-	// Set up initial location of projectile
-	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
-	CCSprite* pBullet = CCSprite::create("bullet.png",
-			CCRectMake(0, 0, 20 ,20));
-	pBullet->setPosition(ccp(20, winSize.height/2));
-
-	// Determinie offset of location to projectile
-	int offX = location.x - pBullet->getPosition().x;
-	int offY = location.y - pBullet->getPosition().y;
-
-	if (offX <= 0)
-		return;
-
-	this->addChild(pBullet);
-
-	// Determine where we wish to shoot the pBullet to
-	int realX = winSize.width + (pBullet->getContentSize().width / 2);
-	float ratio = (float) offY / (float) offX;
-	int realY = (realX * ratio) + pBullet->getPosition().y;
-	CCPoint realDest = ccp(realX, realY);
-
-	// Determine the length of how far we're shooting
-	int offRealX = realX - pBullet->getPosition().x;
-	int offRealY = realY - pBullet->getPosition().y;
-	float length = sqrtf((offRealX * offRealX) + (offRealY * offRealY));
-	float velocity = 480 / 1; // 480pixels/1sec
-	float realMoveDuration = length / velocity;
-
-	// Move pBullet to actual endpoint
-	pBullet->runAction(
-			CCSequence::create(CCMoveTo::create(realMoveDuration, realDest),
-					CCCallFuncN::create(this,
-							callfuncN_selector(GameScene::spriteMoveFinished)),
-					NULL));
-
-}
-
-void GameScene::ccTouchMoved(cocos2d::CCTouch *touch,
-		cocos2d::CCEvent * event) {
-	//移动精灵
+void GameScene::ccTouchMoved(cocos2d::CCTouch *touch, cocos2d::CCEvent * event) {
+	//手指的位置
 	CCPoint touchLocation = touch->getLocationInView();
-	CCPoint prevLocation = touch->getPreviousLocationInView();
+//	CCPoint touchLocation = touch->getPreviousLocationInView();
 	touchLocation = CCDirector::sharedDirector()->convertToGL(touchLocation);
-	prevLocation = CCDirector::sharedDirector()->convertToGL(prevLocation);
 
-	//sprite -> setPosition
-	CCNode* pNode = getChildByTag(1000);
-	if (pNode != NULL) {
-		pNode->setPosition(touchLocation);
+	CCNode* heroNode = getChildByTag(TAG_HERO);
+	CCPoint heroPoint = heroNode->getPosition();
+	CCPoint movePos = ccpSub(touchLocation, m_tBeginPos);
+	CCPoint nextPos = ccpAdd(heroPoint, movePos);
+	if(nextPos.x<MAX_X&&nextPos.x>MIN_X && nextPos.y<MAX_Y&& nextPos.y>MIN_Y) {
+		heroNode->setPosition(nextPos);
 	}
+	m_tBeginPos = touchLocation;
+	//sprite -> setPosition
+//	CCNode* pNode = getChildByTag(1000);
+//	if (pNode != NULL) {
+//		pNode->setPosition(touchLocation);
+//	}
+
+//	if(stepIndex == -5) {
+//		CCPoint heroLocation = plane->getPosition();
+//		CCPoint lastOne = ccp(heroLocation.x+xdelta, heroLocation.y+ydelta);
+//		CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+////		if(touchLocation.x>=0 && touchLocation.x<=winSize.width && touchLocation.y>=0 && touchLocation.y<=winSize.height) {
+////			if(lastOne.x != touchLocation.x || lastOne.y != touchLocation.y) {
+//				plane->setPosition(ccp(heroLocation.x+xdelta, heroLocation.y+ydelta));
+////			}
+////		}
+//	}
 
 }
 
-void GameScene::ccTouchCancelled(cocos2d::CCTouch* touch,
-		cocos2d::CCEvent* event) {
+//触屏结束的时候发射子弹
+void GameScene::ccTouchEnded(cocos2d::CCTouch * touch, cocos2d::CCEvent * event) {
+
+	stepIndex = -1;
+
+//	CCPoint location = touch->getLocationInView();
+//	location = CCDirector::sharedDirector()->convertToGL(location);
+//
+//	// Set up initial location of projectile
+//	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+//	CCSprite* pBullet = CCSprite::create("bullet.png",
+//			CCRectMake(0, 0, 20 ,20));
+//	pBullet->setPosition(ccp(20, winSize.height/2));
+//
+//	// Determinie offset of location to projectile
+//	int offX = location.x - pBullet->getPosition().x;
+//	int offY = location.y - pBullet->getPosition().y;
+//
+//	if (offX <= 0)
+//		return;
+//
+//	this->addChild(pBullet);
+//
+//	// Determine where we wish to shoot the pBullet to
+//	int realX = winSize.width + (pBullet->getContentSize().width / 2);
+//	float ratio = (float) offY / (float) offX;
+//	int realY = (realX * ratio) + pBullet->getPosition().y;
+//	CCPoint realDest = ccp(realX, realY);
+//
+//	// Determine the length of how far we're shooting
+//	int offRealX = realX - pBullet->getPosition().x;
+//	int offRealY = realY - pBullet->getPosition().y;
+//	float length = sqrtf((offRealX * offRealX) + (offRealY * offRealY));
+//	float velocity = 480 / 1; // 480pixels/1sec
+//	float realMoveDuration = length / velocity;
+//
+//	// Move pBullet to actual endpoint
+//	pBullet->runAction(
+//			CCSequence::create(CCMoveTo::create(realMoveDuration, realDest),
+//					CCCallFuncN::create(this,
+//							callfuncN_selector(GameScene::spriteMoveFinished)),
+//					NULL));
+
+}
+
+
+
+void GameScene::ccTouchCancelled(cocos2d::CCTouch* touch, cocos2d::CCEvent* event) {
 
 }
 
@@ -503,8 +544,6 @@ void GameScene::updateBackGround() {
 
 	CCPoint backPoint1 = backSprite1->getPosition();
 	CCPoint backPoint2 = backSprite2->getPosition();
-	CCLog("backPoint1  %f",backPoint1.y);
-	CCLog("backPoint2  %f",backPoint2.y);
 	backSprite1->setPosition(ccp(backPoint1.x, backPoint1.y-scroll_speed));
 	backSprite2->setPosition(ccp(backPoint2.x, backPoint2.y-scroll_speed));
 ////

@@ -10,7 +10,6 @@
 
 #include <Box2D/Box2D.h>
 #include <cocos2d.h>
-#include <list>
 
 #include "Contact/MyContact.h"
 #include "Contact/MyContactListener.h"
@@ -101,6 +100,9 @@ private:
 	CCSprite* backSprite2;
 	CCSprite* backSprite3;
 
+	CCSprite* plane; //Hero
+	CCPoint m_tBeginPos;
+
 	// 添加粒子
 	void addParticle();
 	//散播子弹
@@ -114,6 +116,10 @@ private:
 	void addTarget();  //添加敌方部队
 	void spriteMoveFinished(CCNode* sender);
 	void gameLogic(float dt);
+
+	int stepIndex ;
+	float xdelta;
+	float ydelta;
 
 
 
