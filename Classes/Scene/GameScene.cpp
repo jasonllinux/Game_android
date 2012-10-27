@@ -12,9 +12,13 @@
 #include "Contact/MyContactListener.h"
 #include "Utilty/UILayer.h"
 #include "Config/GameConstants.h"
+#include <list>
+#include <vector>
+
 
 using namespace cocos2d;
 using namespace CocosDenshion;
+
 
 #define TILE_SIZE 32
 #define PT_RATIO 32
@@ -101,7 +105,7 @@ if(! isreduce && iscollision(gameplayer,enemy)){
 	//每帧调用
 
 	//添加粒子系统
-	this->addParticle();
+//	this->addParticle();
 	//---碰撞检测
 	// create physic world
 //	b2Vec2 gravity(0, 0);
@@ -116,8 +120,10 @@ if(! isreduce && iscollision(gameplayer,enemy)){
 //
 	schedule(schedule_selector(GameScene::updateBackGround));
 	schedule(schedule_selector(GameScene::tick));
-	this->schedule(schedule_selector(GameScene::gameLogic), 1.0);
-	this->schedule(schedule_selector(GameScene::update), 1.f);
+	schedule(schedule_selector(GameScene::gameLogic), 1.0);
+	schedule(schedule_selector(GameScene::update), 1.f);
+	//更新子弹
+//	schedule(schedule_selector(GameScene::shootBullet), 1.0);
 
 	//TODO import 不然触屏无法使用
 	this->setTouchEnabled(true);
@@ -256,52 +262,7 @@ void GameScene::ccTouchCancelled(cocos2d::CCTouch* touch, cocos2d::CCEvent* even
 
 }
 
-//随机添加Sprite
-void GameScene::addTarget() {
 
-	//TODO 随机选择敌机
-	int n = 1;
-	CCSprite *target = CCSprite::create("fire1.png");
-
-	//Determin where to spawm the target along the Y axis;
-	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
-//	int minY = target->getContentSize().height / 2;
-//	int maxY = winSize.height - target->getContentSize().height / 2;
-	int minX = target->getContentSize().width / 2;
-	int maxX = winSize.width - target->getContentSize().width / 2;
-
-	int rangeX = maxX - minX;
-//	int rangeY = maxY - minY;
-//	int actualY = (rand() % rangeY) + minY;
-
-	int actualX = (rand() % rangeX) + minX;
-	//create the target slightly off-screen along the right edge and along a random position along the y axis as calculated
-//	target->setPosition(
-//			ccp(winSize.width + (target->getContentSize().width/2), actualY));
-	target->setPosition(ccp(
-			actualX, winSize.height + (target->getContentSize().height/2)));
-
-	//determine speed
-	int minDuration = (int) 2.0;
-	int maxDuratoin = (int) 4.0;
-	int rangeDuration = maxDuratoin - minDuration;
-	int actualDuration = (rand() % rangeDuration) + minDuration;
-
-	//create the actions
-//	CCFiniteTimeAction* actionMove = CCMoveTo::create((float) actualDuration,
-//			ccp(0-target->getContentSize().width/2, actualY));
-	CCFiniteTimeAction* actionMove = CCMoveTo::create((float) actualDuration,
-			ccp(actualX, 0-target->getContentSize().height/2));
-
-	//callFuncN selector
-	CCFiniteTimeAction* actionMoveDone = CCCallFuncN::create(this,
-			callfuncN_selector(GameScene::spriteDone));
-	target->runAction(CCSequence::create(actionMove, actionMoveDone, NULL));
-	//TODO 添加Boxbody
-	addBoxBodyForSprite(target);
-	this->addChild(target, 1, 2);
-
-}
 
 //move finished,删除该节点
 void GameScene::spriteMoveFinished(CCNode* sender) {
@@ -311,13 +272,15 @@ void GameScene::spriteMoveFinished(CCNode* sender) {
 
 //Game logic,动态添加节点
 void GameScene::gameLogic(float dt) {
-	this->addTarget();
+//	this->addTarget();
+	this->shootBullet();
 }
 
 //碰撞检测
 void GameScene::update(CCTime dt) {
 	//散播子弹
-	spawmBullets();
+//	spawmBullets();
+//	shootBullet();
 }
 
 //为Sprite加上刚体
@@ -364,13 +327,84 @@ void GameScene::spawmBullets() {
 
 	cat->runAction(
 			CCSequence::create(CCMoveTo::create(10.f, endPos),
-					CCCallFuncN::create(this,
-							callfuncN_selector(GameScene::spriteDone)), NULL));
+					CCCallFuncN::create(this, callfuncN_selector(GameScene::spriteDone)), NULL));
 	//TODO 添加BoxBody
 	addBoxBodyForSprite(cat);
-	addChild(cat, 1, 1);
+	addChild(cat, 1, 111);
 }
 
+//随机添加Sprite, 从上到下
+void GameScene::addTarget() {
+	//TODO 随机选择敌机
+	int n = 1;
+	CCSprite *target = CCSprite::create("fire1.png");
+
+	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+	int minX = target->getContentSize().width / 2;
+	int maxX = winSize.width - target->getContentSize().width / 2;
+
+	int rangeX = maxX - minX;
+
+	int actualX = (rand() % rangeX) + minX;
+
+	target->setPosition(ccp(actualX, winSize.height + (target->getContentSize().height/2)));
+
+	//determine speed
+	int minDuration = (int) 2.0;
+	int maxDuratoin = (int) 4.0;
+	int rangeDuration = maxDuratoin - minDuration;
+	int actualDuration = (rand() % rangeDuration) + minDuration;
+
+	//create the actions
+	CCFiniteTimeAction* actionMove = CCMoveTo::create((float) actualDuration,
+			ccp(actualX, 0-target->getContentSize().height/2));
+	CCFiniteTimeAction* actionMoveDone = CCCallFuncN::create(this,
+			callfuncN_selector(GameScene::spriteDone));
+	target->runAction(CCSequence::create(actionMove, actionMoveDone, NULL));
+	//TODO 添加Boxbody
+	addBoxBodyForSprite(target);
+	this->addChild(target, 1, 2);
+
+}
+
+//为Hero发射子弹
+void GameScene::shootBullet() {
+
+	float moveDuration = 4.0;
+
+	CCPoint heroPos = this->plane->getPosition();
+	CCSprite *cat = CCSprite::create("bullet.png");
+	float speed = (cat->getContentSize().height/2);
+	CCSize catSize = cat->getContentSize();
+	CCSize heroSize = this->plane->getContentSize();
+
+	float startX = heroPos.x;
+	float startY = heroPos.y + heroSize.height/2 + catSize.height/2;
+
+	CCPoint startPos = ccp(startX, startY);
+//	CCPoint endPos = ccp(startX, -5.0);
+	float deltaY = 0 + catSize.height/2;
+	CCLog("delata y ;;;;;;%f",deltaY);
+
+//	CCLog("start Pos: x:%f, y:%f \n", startPos.x, startPos.y);
+//	CCLog("end Pos: x:%f, y:%f \n", endPos.x, endPos.y);
+
+	cat->setPosition(startPos);
+	//TODO 10.f 需要修改
+	CCFiniteTimeAction* actionMove = CCMoveTo::create(moveDuration, ccp(startX, deltaY));
+	CCFiniteTimeAction* actionMoveDone = CCCallFuncN::create(this,callfuncN_selector(GameScene::spriteMoveFinished));
+	cat->runAction(CCSequence::create(actionMove, actionMoveDone, NULL));
+
+//	addBoxBodyForSprite(cat);
+	addChild(cat, 1, TAG_Bullet);
+
+}
+
+void GameScene::updateBullet() {
+//	vector<CCNode*> nodes = vector(this->getChildByTag(TAG_Bullet));
+//	for(vector<CCSprite*>::iterator iter=; iter!=ivec.end(); ++iter)
+
+}
 
 
 //销毁Sprite
@@ -557,4 +591,7 @@ void GameScene::updateBackGround() {
 	}
 
 }
+
+
+
 

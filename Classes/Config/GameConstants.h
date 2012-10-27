@@ -26,7 +26,7 @@ enum NodeTag {
 	//精灵类
 	TAG_HERO = 1000,
 	PLANE_OTHER = 2000,
-
+	TAG_Bullet = 49,
 
 };
 

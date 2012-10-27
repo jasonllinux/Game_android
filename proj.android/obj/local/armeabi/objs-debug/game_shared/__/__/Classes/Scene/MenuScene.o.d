@@ -261,7 +261,8 @@ obj/local/armeabi/objs-debug/game_shared/__/__/Classes/Scene//MenuScene.o: \
  /home/arch/cocos2d-x/Game/proj.android/../../external/Box2D/../Box2D/Dynamics/Joints/b2WeldJoint.h \
  jni/../../Classes/Contact/MyContact.h \
  jni/../../Classes/Contact/MyContactListener.h \
- jni/../../Classes/Contact/MyContact.h
+ jni/../../Classes/Contact/MyContact.h \
+ jni/../../Classes/Config/GameConstants.h
 
 /home/arch/cocos2d-x/Game/proj.android/../../CocosDenshion/android/../include/SimpleAudioEngine.h:
 
@@ -786,3 +787,5 @@ jni/../../Classes/Contact/MyContact.h:
 jni/../../Classes/Contact/MyContactListener.h:
 
 jni/../../Classes/Contact/MyContact.h:
+
+jni/../../Classes/Config/GameConstants.h:

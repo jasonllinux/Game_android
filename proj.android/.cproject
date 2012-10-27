@@ -43,9 +43,9 @@
 									<listOptionValue builtIn="false" value="../../../cocos2dx/layers_scenes_transitions_nodes"/>
 									<listOptionValue builtIn="false" value="../../../external/chipmunk/include/chipmunk"/>
 									<listOptionValue builtIn="false" value="/usr/include"/>
-									<listOptionValue builtIn="false" value="/usr/include/c++/4.7.1"/>
 									<listOptionValue builtIn="false" value="../../../external"/>
 									<listOptionValue builtIn="false" value="/opt/android-ndk/platforms/android-14/arch-arm/usr/include"/>
+									<listOptionValue builtIn="false" value="/usr/include/c++/4.7.2"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.593795222" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>

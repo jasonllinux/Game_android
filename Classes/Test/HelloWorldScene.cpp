@@ -90,7 +90,7 @@ void HelloWorld::menuCloseCallback(CCObject* pSender)
 	CCLog("close*************************");
     CCDirector::sharedDirector()->end();
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     exit(0);
 #endif
 }

@@ -13,7 +13,7 @@
 
 #include "Contact/MyContact.h"
 #include "Contact/MyContactListener.h"
-
+#include "Config/GameConstants.h"
 
 using std::list;
 
@@ -117,11 +117,13 @@ private:
 	void spriteMoveFinished(CCNode* sender);
 	void gameLogic(float dt);
 
+	//发射子弹
+	void shootBullet();
+	void updateBullet();
+
 	int stepIndex ;
 	float xdelta;
 	float ydelta;
-
-
 
 };
 

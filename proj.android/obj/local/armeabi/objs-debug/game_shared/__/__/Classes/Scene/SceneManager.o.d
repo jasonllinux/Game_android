@@ -259,6 +259,7 @@ obj/local/armeabi/objs-debug/game_shared/__/__/Classes/Scene//SceneManager.o: \
  jni/../../Classes/Contact/MyContact.h \
  jni/../../Classes/Contact/MyContactListener.h \
  jni/../../Classes/Contact/MyContact.h \
+ jni/../../Classes/Config/GameConstants.h \
  jni/../../Classes/Scene//AboutScene.h
 
 jni/../../Classes/Scene//SceneManager.h:
@@ -778,5 +779,7 @@ jni/../../Classes/Contact/MyContact.h:
 jni/../../Classes/Contact/MyContactListener.h:
 
 jni/../../Classes/Contact/MyContact.h:
+
+jni/../../Classes/Config/GameConstants.h:
 
 jni/../../Classes/Scene//AboutScene.h:

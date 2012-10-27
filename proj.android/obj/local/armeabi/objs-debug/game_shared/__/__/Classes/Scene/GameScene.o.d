@@ -258,10 +258,10 @@ obj/local/armeabi/objs-debug/game_shared/__/__/Classes/Scene//GameScene.o: \
  jni/../../Classes/Contact/MyContact.h \
  jni/../../Classes/Contact/MyContactListener.h \
  jni/../../Classes/Contact/MyContact.h \
+ jni/../../Classes/Config/GameConstants.h \
  /home/arch/cocos2d-x/Game/proj.android/../../CocosDenshion/android/../include/SimpleAudioEngine.h \
  /home/arch/cocos2d-x/Game/proj.android/../../CocosDenshion/android/../include/Export.h \
- jni/../../Classes/Utilty/UILayer.h \
- jni/../../Classes/Config/GameConstants.h
+ jni/../../Classes/Utilty/UILayer.h
 
 jni/../../Classes/Scene//MenuScene.h:
 
@@ -779,10 +779,10 @@ jni/../../Classes/Contact/MyContactListener.h:
 
 jni/../../Classes/Contact/MyContact.h:
 
+jni/../../Classes/Config/GameConstants.h:
+
 /home/arch/cocos2d-x/Game/proj.android/../../CocosDenshion/android/../include/SimpleAudioEngine.h:
 
 /home/arch/cocos2d-x/Game/proj.android/../../CocosDenshion/android/../include/Export.h:
 
 jni/../../Classes/Utilty/UILayer.h:
-
-jni/../../Classes/Config/GameConstants.h:
